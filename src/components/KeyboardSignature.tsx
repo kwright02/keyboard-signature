@@ -58,7 +58,7 @@ export const KeyboardSignature = () => {
 
     for (const char of name.toUpperCase()) {
       if (char in keyboardLayout) {
-        const { x, y } = keyboardLayout[char];
+        const { x, y } = keyboardLayout[char as keyof typeof keyboardLayout];
         // Adjust coordinates (multiply by 60 for spacing)
         points.push({ x: x * 60 + 28, y: y * 60 + 40 });
       }
