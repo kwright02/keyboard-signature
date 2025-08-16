@@ -147,7 +147,7 @@ export const KeyboardSignature = () => {
         className="placeholder-neutral-800 [&::placeholder]:duration-200 [&::placeholder]:transition-all focus:placeholder-neutral-600 tracking-wide text-4xl text-white bg-transparent duration-150 transition-all ease-out px-4 py-2 text-center outline-none"
       />
 
-      <div className="relative mb-4 mt-8 max-sm:scale-80">
+      <div className="relative mb-4 mt-8 max-sm:scale-70">
         {/* Keyboard */}
         <div
           className={`relative transition-opacity ease-out ${
@@ -212,23 +212,34 @@ export const KeyboardSignature = () => {
       </div>
 
       <div
-        className={`flex flex-row gap-2 mt-8 transition-all ease-in-out ${name.length > 0 ? "opacity-100 tramslate-y-0 duration-1000" : "opacity-0 translate-y-2 duration-150"}`}
+        className={`flex flex-col gap-2 mt-8 transition-all ease-in-out ${name.length > 0 ? "opacity-100 tramslate-y-0 duration-1000" : "opacity-0 translate-y-2 duration-150"}`}
       >
-        <button
-          type="button"
-          onClick={exportSVG}
-          className="bg-white text-black px-3.5 py-1.5 origin-right rounded-md text-sm font-semibold cursor-pointer active:scale-98 active:brightness-70 hover:brightness-85 transition-all duration-100 ease-out"
-        >
-          Export SVG
-        </button>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={exportSVG}
+            className="bg-white text-black px-3.5 py-1.5 origin-right rounded-md text-sm font-semibold cursor-pointer active:scale-98 active:brightness-70 hover:brightness-85 transition-all duration-100 ease-out"
+          >
+            Export SVG
+          </button>
 
-        <button
-          type="button"
-          onClick={exportPNG}
-          className="bg-white text-black px-3.5 py-1.5 origin-left rounded-md text-sm font-semibold cursor-pointer active:scale-98 active:brightness-70 hover:brightness-85 transition-all duration-100 ease-out"
+          <button
+            type="button"
+            onClick={exportPNG}
+            className="bg-white text-black px-3.5 py-1.5 origin-left rounded-md text-sm font-semibold cursor-pointer active:scale-98 active:brightness-70 hover:brightness-85 transition-all duration-100 ease-out"
+          >
+            Export PNG
+          </button>
+        </div>
+
+        <a
+          href="https://github.com/cnrad/keyboard-signature"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="font-medium text-neutral-500 border border-neutral-700/50 px-3.5 py-1.5 bg-neutral-900/50 text-sm rounded-md text-center hover:bg-neutral-900/75 hover:text-neutral-200 transition-all duration-100 ease-out"
         >
-          Export PNG
-        </button>
+          View on GitHub
+        </a>
       </div>
     </div>
   );

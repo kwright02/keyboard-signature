@@ -19,18 +19,9 @@ export default function Home() {
         <title>Digitized Signatures</title>
       </Head>
       <div
-        className={`w-screen h-screen flex flex-col items-center justify-center ${sans.variable} ${mono.variable} font-sans`}
+        className={`w-screen h-screen flex flex-col items-center sm:justify-center ${sans.variable} ${mono.variable} font-sans py-10`}
       >
         <KeyboardSignature />
-
-        <a
-          href="https://github.com/cnrad/keyboard-signature"
-          target="_blank"
-          rel="noreferrer noopener"
-          className="font-medium text-neutral-500 absolute bottom-4 w-auto mx-auto text-center hover:underline hover:text-neutral-200"
-        >
-          github
-        </a>
       </div>
     </>
   );
