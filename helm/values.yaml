@@ -13,11 +13,11 @@ resources: {}
 
 ingress:
   enabled: false
-  className: ""
+  className: "nginx"
   annotations: {}
   hosts:
-    - host: chart-example.local
+    - host: kwright02.dev
       paths:
-        - path: /
+        - path: /keyboard-signature
           pathType: ImplementationSpecific
   tls: []
