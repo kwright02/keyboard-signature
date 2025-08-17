@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/kwright02/keyboard-signature
-  tag: latest
+  tag: master
   pullPolicy: IfNotPresent
 
 service:
