@@ -1,38 +1,49 @@
 import { useEffect, useMemo, useState } from "react";
 
-const keyboardLayout = {
-  Q: { x: 0.5, y: 0 },
-  W: { x: 1.5, y: 0 },
-  E: { x: 2.5, y: 0 },
-  R: { x: 3.5, y: 0 },
-  T: { x: 4.5, y: 0 },
-  Y: { x: 5.5, y: 0 },
-  U: { x: 6.5, y: 0 },
-  I: { x: 7.5, y: 0 },
-  O: { x: 8.5, y: 0 },
-  P: { x: 9.5, y: 0 },
+type KeyboardLayout = "qwerty";
+type Key = {
+  x: number;
+  y: number;
+};
 
-  A: { x: 0.75, y: 1 },
-  S: { x: 1.75, y: 1 },
-  D: { x: 2.75, y: 1 },
-  F: { x: 3.75, y: 1 },
-  G: { x: 4.75, y: 1 },
-  H: { x: 5.75, y: 1 },
-  J: { x: 6.75, y: 1 },
-  K: { x: 7.75, y: 1 },
-  L: { x: 8.75, y: 1 },
+const keyboardLayouts: Record<KeyboardLayout, Record<string, Key>> = {
+  qwerty: {
+    Q: { x: 0.5, y: 0 },
+    W: { x: 1.5, y: 0 },
+    E: { x: 2.5, y: 0 },
+    R: { x: 3.5, y: 0 },
+    T: { x: 4.5, y: 0 },
+    Y: { x: 5.5, y: 0 },
+    U: { x: 6.5, y: 0 },
+    I: { x: 7.5, y: 0 },
+    O: { x: 8.5, y: 0 },
+    P: { x: 9.5, y: 0 },
 
-  Z: { x: 1.25, y: 2 },
-  X: { x: 2.25, y: 2 },
-  C: { x: 3.25, y: 2 },
-  V: { x: 4.25, y: 2 },
-  B: { x: 5.25, y: 2 },
-  N: { x: 6.25, y: 2 },
-  M: { x: 7.25, y: 2 },
+    A: { x: 0.75, y: 1 },
+    S: { x: 1.75, y: 1 },
+    D: { x: 2.75, y: 1 },
+    F: { x: 3.75, y: 1 },
+    G: { x: 4.75, y: 1 },
+    H: { x: 5.75, y: 1 },
+    J: { x: 6.75, y: 1 },
+    K: { x: 7.75, y: 1 },
+    L: { x: 8.75, y: 1 },
+
+    Z: { x: 1.25, y: 2 },
+    X: { x: 2.25, y: 2 },
+    C: { x: 3.25, y: 2 },
+    V: { x: 4.25, y: 2 },
+    B: { x: 5.25, y: 2 },
+    N: { x: 6.25, y: 2 },
+    M: { x: 7.25, y: 2 },
+  },
 } as const;
 
 export const KeyboardSignature = () => {
   const [name, setName] = useState("");
+  // TODO: implement multiple keyboard layouts I guess
+  const [currentKeyboardLayout, _setCurrentKeyboardLayout] =
+    useState<KeyboardLayout>("qwerty");
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   // Flash keyboard when name changes
@@ -57,8 +68,8 @@ export const KeyboardSignature = () => {
     const points = [];
 
     for (const char of name.toUpperCase()) {
-      if (char in keyboardLayout) {
-        const { x, y } = keyboardLayout[char as keyof typeof keyboardLayout];
+      if (char in keyboardLayouts[currentKeyboardLayout]) {
+        const { x, y } = keyboardLayouts[currentKeyboardLayout][char];
         // Adjust coordinates (multiply by 60 for spacing)
         points.push({ x: x * 60 + 28, y: y * 60 + 40 });
       }
@@ -81,7 +92,7 @@ export const KeyboardSignature = () => {
       name
         .toUpperCase()
         .split("")
-        .filter((char) => char in keyboardLayout),
+        .filter((char) => char in keyboardLayouts[currentKeyboardLayout]),
     );
   }, [name]);
 
@@ -139,15 +150,18 @@ export const KeyboardSignature = () => {
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center`}>
+    <div
+      className={`flex flex-col sm:items-center sm:justify-center max-sm:mx-auto max-sm:w-[28rem] sm:w-fit`}
+    >
       <input
+        autoFocus
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Enter your name"
         className="placeholder-neutral-800 [&::placeholder]:duration-200 [&::placeholder]:transition-all focus:placeholder-neutral-600 tracking-wide text-4xl text-white bg-transparent duration-150 transition-all ease-out px-4 py-2 text-center outline-none"
       />
 
-      <div className="relative mb-4 mt-8 max-sm:scale-70">
+      <div className="relative mb-4 mt-8 max-sm:mt-0 max-sm:scale-70 max-sm:-ml-22">
         {/* Keyboard */}
         <div
           className={`relative transition-opacity ease-out ${
@@ -159,31 +173,33 @@ export const KeyboardSignature = () => {
           }`}
           style={{ width: "650px", height: "200px" }}
         >
-          {Object.entries(keyboardLayout).map(([char, pos]) => {
-            const isActive = activeKeys.has(char);
-            const isCurrentKey =
-              name.length > 0 && name.toUpperCase()[name.length - 1] === char;
+          {Object.entries(keyboardLayouts[currentKeyboardLayout]).map(
+            ([char, pos]) => {
+              const isActive = activeKeys.has(char);
+              const isCurrentKey =
+                name.length > 0 && name.toUpperCase()[name.length - 1] === char;
 
-            return (
-              <div
-                key={char}
-                onClick={() => setName((p) => p + char)}
-                className={`absolute w-14 h-12 rounded-lg border flex items-center justify-center text-sm font-mono transition-all duration-200 cursor-pointer active:scale-95 ${
-                  isCurrentKey
-                    ? "bg-white/50 border-neutral-400 text-black shadow-lg shadow-white-500/50 scale-110"
-                    : isActive
-                      ? "bg-neutral-900 border-neutral-800 text-white"
-                      : "bg-transparent border-neutral-800/50 text-neutral-300"
-                }`}
-                style={{
-                  left: `${pos.x * 60}px`,
-                  top: `${pos.y * 60 + 15}px`,
-                }}
-              >
-                {char}
-              </div>
-            );
-          })}
+              return (
+                <div
+                  key={char}
+                  onClick={() => setName((p) => p + char)}
+                  className={`absolute w-14 h-12 rounded-lg border flex items-center justify-center text-sm font-mono transition-all duration-200 active:scale-95 ${
+                    isCurrentKey
+                      ? "bg-white/50 border-neutral-400 text-black shadow-lg shadow-white-500/50 scale-110"
+                      : isActive
+                        ? "bg-neutral-900 border-neutral-800 text-white"
+                        : "bg-transparent border-neutral-800/50 text-neutral-300"
+                  }`}
+                  style={{
+                    left: `${pos.x * 60}px`,
+                    top: `${pos.y * 60 + 15}px`,
+                  }}
+                >
+                  {char}
+                </div>
+              );
+            },
+          )}
         </div>
 
         {/* Signature */}
@@ -212,7 +228,7 @@ export const KeyboardSignature = () => {
       </div>
 
       <div
-        className={`flex flex-col gap-2 mt-8 transition-all ease-in-out ${name.length > 0 ? "opacity-100 tramslate-y-0 duration-1000" : "opacity-0 translate-y-2 duration-150"}`}
+        className={`max-sm:w-[20rem] max-sm:mx-auto flex flex-col gap-2 sm:mt-8 transition-all ease-in-out ${name.length > 0 ? "opacity-100 tramslate-y-0 duration-1000" : "opacity-0 translate-y-2 duration-150"}`}
       >
         <div className="grid grid-cols-2 gap-2">
           <button
