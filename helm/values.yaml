@@ -18,6 +18,6 @@ ingress:
   hosts:
     - host: kwright02.dev
       paths:
-        - path: /keyboard-signature
+        - path: /
           pathType: ImplementationSpecific
   tls: []
