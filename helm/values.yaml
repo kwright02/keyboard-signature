@@ -12,12 +12,12 @@ service:
 resources: {}
 
 ingress:
-  enabled: false
+  enabled: true
   className: "nginx"
   annotations: {}
   hosts:
     - host: kwright02.dev
       paths:
-        - path: /
-          pathType: ImplementationSpecific
+        - path: /keyboard-signature
+          pathType: Prefix
   tls: []
